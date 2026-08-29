@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class Main {
     public static void main(String[] args) {
-        int puerto = 8080;
+        int puerto = 8081;
         
         try (ServerSocket servidor = new ServerSocket(puerto)) {
             System.out.println("Servidor HTTP iniciado en puerto: " + puerto);
@@ -17,7 +17,7 @@ public class Main {
                 Socket cliente = servidor.accept(); 
                 System.out.println("¡Alguien se conectó! IP: " + cliente.getInetAddress());
                 
-                // 1. Preparamos el lector para escuchar al cliente
+                //Preparamos el lector para escuchar al cliente
                 BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
                 String linea = in.readLine();
                
@@ -36,24 +36,46 @@ public class Main {
                 System.out.println("imprime la Ruta get");
                 System.out.println("el Usuario quiere ingresar a " + primeraLinea[1]);
 
-
-                // 2. Preparamos el canal de salida para responder
+                // Preparamos el canal de salida para responder
                 PrintWriter out = new PrintWriter(cliente.getOutputStream(), true);
-                
-                // 3. Escribimos la cabecera HTTP estricta
-                out.println("HTTP/1.1 200 OK"); 
-                out.println("Content-Type: text/html; charset=UTF-8"); 
-                out.println(); // ¡ESTA LÍNEA VACÍA ES OBLIGATORIA PARA SEPARAR EL CONTENIDO!
-                
-                // 4. Enviamos el cuerpo: Nuestro propio HTML
-                out.println("<html>");
-                out.println("<head><title>Servidor Java</title></head>");
-                out.println("<body style='background-color: #282c34; color: white; text-align: center; font-family: sans-serif; padding: 50px;'>");
-                out.println("<h1>¡Hola desde tu propio servidor Java puro! 🚀</h1>");
-                out.println("<p>Si estás leyendo esto, tu código HTTP funciona a la perfección.</p>");
-                out.println("</body>");
-                out.println("</html>");
-                
+
+                //segun la ruta vamo a devolver la pagina que corresponda
+                switch (primeraLinea[1]) {
+                    case "/":
+                        //devuelve el home 
+                        out.println("HTTP/1.1 200 OK"); 
+                        out.println("Content-Type: text/html; charset=UTF-8"); 
+                        out.println(); // Línea vacía obligatoria
+                        out.println("<html><body style='background: #282c34; text-align:center; color: white; padding: 50px;'>");
+                        out.println("<h1>Página Principal</h1>");
+                        out.println("<p>Bienvenido al inicio de mi servidor Java.</p>");
+                        out.println("</body></html>");
+                        break;
+                    case "/contacto":
+                        out.println("HTTP/1.1 200 OK"); 
+                        out.println("Content-Type: text/html; charset=UTF-8"); 
+                        out.println();
+                        out.println("<html>");
+                        out.println("<body style='background: #1e3a8a; color: white; text-align: center; font-family: sans-serif; padding: 50px;'>");
+                        out.println("<h1>LISTA DE CONTACTOS</h1>");
+                        out.println("<p> Email:Moder@UFO.com. </p>");
+                        out.println("</body>");
+                        out.println("</html>");
+                        break;
+                    default:
+                        out.println("HTTP/1.1 404 NOT FOUND"); 
+                        out.println("Content-Type: text/html; charset=UTF-8"); 
+                        out.println();
+                        out.println("<html>");
+                        out.println("<p><h1>Error 404</h1></p>");
+                        out.println("<body style='background-color: #7f1d1d; color: white; text-align: center; font-family: sans-serif; padding: 50px;'>");
+                        out.println("<p>La pagina" + primeraLinea[1] + "a la que intentas acceder no existe.</p>");
+                        out.println("</body>");
+                        out.println("</html>");
+                        break;
+                }
+
+
                 System.out.println("--> Respuesta HTML enviada con éxito.");
                
                 cliente.close(); 
