@@ -16,111 +16,13 @@ public class Main {
                 // El programa se pausa acá hasta que un navegador se conecta
                 Socket cliente = servidor.accept();
                 System.out.println("¡Alguien se conectó! IP: " + cliente.getInetAddress());
-                Hilos newHilo = new Hilos(cliente);
-                newHilo.start();
+                
+                ManejadorCliente manageClient = new ManejadorCliente(cliente);
+                manageClient.start();
 
             }
         } catch (IOException e) {
             System.err.println("Error en el servidor: " + e.getMessage());
         }
     }
-}
-
-class Hilos extends Thread {
-    Socket cliente;
-
-    Hilos(Socket c) {
-        this.cliente = c;
-    }
-
-    @Override
-    public void run() {
-
-        // Preparamos el lector para escuchar al cliente
-        try(BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream()));){
-                    String linea = in.readLine();
-
-        // Si la conexión viene vacía, la cerramos y volvemos a empezar
-        if (linea == null || linea.isEmpty()) {
-            cliente.close();
-            interrupt(); // Salta a la siguiente iteración
-        }
-
-        String[] primeraLinea = linea.split(" ");
-        System.out.println("la primera linea sin cortar: " + linea);
-
-        System.out.println("imprime la Ruta get");
-        System.out.println("el Usuario quiere ingresar a " + primeraLinea[1]);
-
-        // Preparamos el canal de salida para responder
-        PrintWriter out = new PrintWriter(cliente.getOutputStream(), true);
-
-        // segun la ruta vamo a devolver la pagina que corresponda
-        switch (primeraLinea[1]) {
-            case "/":
-                // devuelve el home
-                out.println("HTTP/1.1 200 OK");
-                out.println("Content-Type: text/html; charset=UTF-8");
-                out.println(); // Línea vacía obligatoria
-                out.println(
-                        "<html><body style='background: #282c34; text-align:center; color: white; padding: 50px;'>");
-                out.println("<h1>Página Principal</h1>");
-                out.println("<p>Bienvenido al inicio de mi servidor Java.</p>");
-                out.println("</body></html>");
-                break;
-            case "/contacto":
-                out.println("HTTP/1.1 200 OK");
-                out.println("Content-Type: text/html; charset=UTF-8");
-                out.println();
-                out.println("<html>");
-                out.println(
-                        "<body style='background: #1e3a8a; color: white; text-align: center; font-family: sans-serif; padding: 50px;'>");
-                out.println("<h1>LISTA DE CONTACTOS</h1>");
-                out.println("<p> Email:Moder@UFO.com. </p>");
-                out.println("</body>");
-                out.println("</html>");
-                break;
-            case "/api/info":
-                out.println("HTTP/1.1 200 OK");
-                out.println("Content-Type: application/json charset=UTF-8 ");
-                out.println();
-                out.println("{ \"nombre\":\"Franco\", \"role\":\"Backend\", \"Status\":\"Online\" }");
-                break;
-            case "/lento":
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-                out.println("HTTP/1.1 200 OK");
-                out.println("Content-Type: application/json charset=UTF-8 ");
-                out.println();
-                out.println("{ \"nombre\":\"Franco\", \"role\":\"Backend\", \"Status\":\"Online\" }");
-
-                break;
-            default:
-                out.println("HTTP/1.1 404 NOT FOUND");
-                out.println("Content-Type: text/html; charset=UTF-8");
-                out.println();
-                out.println("<html>");
-                out.println("<p><h1>Error 404</h1></p>");
-                out.println(
-                        "<body style='background-color: #7f1d1d; color: white; text-align: center; font-family: sans-serif; padding: 50px;'>");
-                out.println("<p>La pagina" + primeraLinea[1] + "a la que intentas acceder no existe.</p>");
-                out.println("</body>");
-                out.println("</html>");
-                break;
-        }
-
-        System.out.println("--> Respuesta HTML enviada con éxito.");
-
-        cliente.close();
-        }catch(IOException e){
-            System.err.println("Error en el servidor: " + e.getMessage());
-        }
-        
-
-
-    }
-
 }
