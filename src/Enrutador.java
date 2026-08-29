@@ -2,6 +2,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 public class Enrutador {
     
     // Método estático que recibe la ruta y devuelve la respuesta HTTP completa
@@ -9,13 +16,45 @@ public class Enrutador {
         StringBuilder respuesta = new StringBuilder();
 
         switch (ruta) {
+            case"/script.js":
+                Path path3 = Path.of("public/script.js");
+                try {
+                    String contenidoCss = Files.readString(path3);
+                    respuesta.append("HTTP/1.1 200 OK\n");
+                    respuesta.append("Content-Type: text/javascript; charset=UTF-8\n\n");
+                    respuesta.append(contenidoCss);
+                } catch (Exception e) {
+                    respuesta.append("HTTP/1.1 500 Internal Server Error\n");
+                    respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
+                    System.out.println(e.getMessage().concat("HTTP/1.1 500 Internal Server Error"));
+                }
+                break;
+            case"/style.css":
+                Path path2 = Path.of("public/style.css");
+                try {
+                    String contenidoCss = Files.readString(path2);
+                    respuesta.append("HTTP/1.1 200 OK\n");
+                    respuesta.append("Content-Type: text/css; charset=UTF-8\n\n");
+                    respuesta.append(contenidoCss);
+                } catch (Exception e) {
+                    respuesta.append("HTTP/1.1 500 Internal Server Error\n");
+                    respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
+                    System.out.println(e.getMessage().concat("HTTP/1.1 500 Internal Server Error"));
+                }
+                break;
             case "/":
-                respuesta.append("HTTP/1.1 200 OK\n");
-                respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                respuesta.append("<html><body style='background: #282c34; text-align:center; color: white; padding: 50px;'>");
-                respuesta.append("<h1>Página Principal</h1>");
-                respuesta.append("<p>Bienvenido al inicio de mi servidor Java.</p>");
-                respuesta.append("</body></html>");
+                Path path = Path.of("public/index.html");
+                try {
+                    String contenidoHtml = Files.readString(path);
+                    respuesta.append("HTTP/1.1 200 OK\n");
+                    respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
+                    respuesta.append(contenidoHtml);
+
+                } catch (Exception e) {
+                    respuesta.append("HTTP/1.1 500 Internal Server Error\n");
+                    respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
+                    System.out.println(e.getMessage().concat("HTTP/1.1 500 Internal Server Error"));
+                }
                 break;
 
             case "/contacto":

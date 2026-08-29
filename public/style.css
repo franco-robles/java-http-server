@@ -1,0 +1,228 @@
+/* RESET BÁSICO: Le saca los márgenes por defecto a los navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #121212; /* Fondo oscuro casi negro */
+    color: #f5f5f5; /* Texto blanco humo */
+    line-height: 1.6;
+}
+
+/* --- CABECERA Y NAVEGACIÓN --- */
+header {
+    background-color: #000000;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #ff4500; /* Línea naranja de acento */
+}
+
+header h1 {
+    font-size: 28px;
+    letter-spacing: 1px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px; /* Separación entre los links */
+}
+
+nav a {
+    text-decoration: none;
+    color: #cccccc;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: color 0.3s ease; /* Animación suave al pasar el mouse */
+}
+
+nav a:hover {
+    color: #ff4500;
+}
+
+/* --- SECCIÓN INICIO (HERO) --- */
+#inicio {
+    text-align: center;
+    padding: 120px 20px;
+    /* Un fondo gris oscuro con textura visual */
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1564982752979-3f7ba9748671?auto=format&fit=crop&w=1350&q=80') center/cover;
+}
+
+#inicio h2 {
+    font-size: 50px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#inicio p {
+    font-size: 20px;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    color: #bbbbbb;
+}
+
+#inicio a {
+    display: inline-block;
+    background-color: #ff4500;
+    color: #ffffff;
+    padding: 15px 35px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 4px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+#inicio a:hover {
+    background-color: #e03e00;
+    transform: scale(1.05); /* Efecto de crecimiento */
+}
+
+/* --- SECCIÓN TABLAS (PRODUCTOS) --- */
+#tablas {
+    padding: 80px 40px;
+    text-align: center;
+}
+
+#tablas h2 {
+    font-size: 36px;
+    margin-bottom: 50px;
+    color: #ffffff;
+}
+
+/* Tarjetas de Producto */
+article {
+    display: inline-block; /* Las pone una al lado de la otra */
+    vertical-align: top;
+    background-color: #1e1e1e;
+    margin: 15px;
+    padding: 25px;
+    border-radius: 8px;
+    width: 320px;
+    text-align: left;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    transition: transform 0.3s;
+}
+
+article:hover {
+    transform: translateY(-10px); /* Hace que la tarjeta "flote" hacia arriba */
+}
+
+article h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #ff4500;
+}
+
+article p {
+    color: #aaaaaa;
+    margin-bottom: 20px;
+}
+
+article strong {
+    display: block;
+    font-size: 28px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+article button {
+    width: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+article button:hover {
+    background-color: #ff4500;
+    color: #ffffff;
+}
+
+/* --- PIE DE PÁGINA --- */
+footer {
+    background-color: #000000;
+    text-align: center;
+    padding: 50px 20px;
+    border-top: 1px solid #333333;
+}
+
+footer h2 {
+    color: #ff4500;
+    margin-bottom: 20px;
+}
+
+footer p {
+    color: #777777;
+    margin-bottom: 10px;
+}
+
+/* --- ESTILO DEL BOTÓN DE TEMA --- */
+.tema-toggle {
+    background: none;
+    border: 1px solid #ff4500;
+    color: #ff4500;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.tema-toggle:hover {
+    background-color: #ff4500;
+    color: #ffffff;
+}
+
+/* --- REGLAS DEL TEMA CLARO --- */
+/* Cuando el body tenga esta clase, estos colores reemplazarán a los oscuros */
+body.light-theme {
+    background-color: #f5f5f5;
+    color: #121212;
+}
+
+body.light-theme header {
+    background-color: #ffffff;
+    border-bottom: 3px solid #ff4500;
+}
+
+body.light-theme nav a {
+    color: #333333;
+}
+
+body.light-theme #tablas h2 {
+    color: #121212;
+}
+
+body.light-theme article {
+    background-color: #ffffff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+body.light-theme article p {
+    color: #555555;
+}
+
+body.light-theme article strong {
+    color: #121212;
+}
+
+body.light-theme footer {
+    background-color: #e0e0e0;
+    border-top: 1px solid #cccccc;
+}
+
+body.light-theme footer p {
+    color: #333333;
+}
