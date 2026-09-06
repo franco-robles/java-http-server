@@ -12,12 +12,17 @@ public class Main {
         int puerto = 8081;
 
         try (
-            ServerSocket servidor = new ServerSocket(puerto)
-            ) {
-            
+                ServerSocket servidor = new ServerSocket(puerto)) {
+
             ExecutorService threadPool = Executors.newFixedThreadPool(10);
             System.out.println("Servidor HTTP iniciado en puerto: " + puerto);
-            
+
+            // El siguiente Runtime cierra los threads y no se pierde memoria al apagar el servidor
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                System.out.println("\nApagando el servidor ...");
+                threadPool.shutdown(); // el pool no acepta a nadie más
+                System.out.println("Servidor cerrado.");
+            }));
 
             while (true) {
                 // El programa se pausa acá hasta que un navegador se conecta
@@ -25,7 +30,6 @@ public class Main {
                 System.out.println("¡Alguien se conectó! IP: " + cliente.getInetAddress());
 
                 threadPool.execute(new ManejadorCliente(cliente));
-               
 
             }
         } catch (IOException e) {
