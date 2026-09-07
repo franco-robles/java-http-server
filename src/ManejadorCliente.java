@@ -31,9 +31,24 @@ public class ManejadorCliente extends Thread {
             
             // IMPORTANTE: Leemos el resto de las cabeceras para que el navegador no se trabe
             String cabecera;
-            while ((cabecera = in.readLine()) != null && !cabecera.isEmpty()) { }
-            
+            int lengthBody = 0;
             String ruta = primeraLinea[1];
+            String metodo = primeraLinea[0];
+
+            while ((cabecera = in.readLine()) != null && !cabecera.isEmpty()) {
+                if(cabecera.startsWith("Content-Length:")){
+                    lengthBody = Integer.parseInt(cabecera.substring(15).trim());
+                }
+            }
+            
+            if(metodo.equals("POST") && lengthBody>0){
+                char[] cuerpoDeLaPeticion = new char[lengthBody];
+                in.read(cuerpoDeLaPeticion, 0, lengthBody);
+                String body = new String(cuerpoDeLaPeticion);
+                System.out.println("EL metodo es: "+ metodo);
+                System.out.println("el cuerpo de la peticion es: "+ body);
+            }
+            
             // Preparamos el canal de salida para responder
             out.print(Enrutador.generarRespuesta(ruta));
             out.flush(); // Asegura que se envíe todo
