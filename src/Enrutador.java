@@ -10,13 +10,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class Enrutador {
-    
+
     // Método estático que recibe la ruta y devuelve la respuesta HTTP completa
-    public static String generarRespuesta(String ruta) {
+    public static String generarRespuesta(String ruta, String metodo, String body, PrintWriter out) {
         StringBuilder respuesta = new StringBuilder();
 
-        switch (ruta) {
-            case"/script.js":
+        String metodoRuta = metodo + " " + ruta;
+        switch (metodoRuta) {
+            case "GET /script.js":
                 Path path3 = Path.of("public/script.js");
                 try {
                     String contenidoCss = Files.readString(path3);
@@ -29,7 +30,7 @@ public class Enrutador {
                     System.out.println(e.getMessage().concat("HTTP/1.1 500 Internal Server Error"));
                 }
                 break;
-            case"/style.css":
+            case "GET /style.css":
                 Path path2 = Path.of("public/style.css");
                 try {
                     String contenidoCss = Files.readString(path2);
@@ -42,7 +43,7 @@ public class Enrutador {
                     System.out.println(e.getMessage().concat("HTTP/1.1 500 Internal Server Error"));
                 }
                 break;
-            case "/":
+            case "GET /":
                 Path path = Path.of("public/index.html");
                 try {
                     String contenidoHtml = Files.readString(path);
@@ -57,23 +58,33 @@ public class Enrutador {
                 }
                 break;
 
-            case "/contacto":
+            case "GET /contacto":
                 respuesta.append("HTTP/1.1 200 OK\n");
                 respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                respuesta.append("<html><body style='background: #1e3a8a; color: white; text-align: center; padding: 50px;'>");
+                respuesta.append(
+                        "<html><body style='background: #1e3a8a; color: white; text-align: center; padding: 50px;'>");
                 respuesta.append("<h1>LISTA DE CONTACTOS</h1>");
                 respuesta.append("<p>Email: Moder@UFO.com</p>");
                 respuesta.append("</body></html>");
                 break;
 
-            case "/api/info":
+            case "GET /api/info":
                 respuesta.append("HTTP/1.1 200 OK\n");
                 respuesta.append("Content-Type: application/json; charset=UTF-8\n\n");
                 respuesta.append("{ \"nombre\":\"Franco\", \"role\":\"Backend\", \"Status\":\"Online\" }");
                 break;
 
-            case "/lento":
-                try { Thread.sleep(10000); } catch (InterruptedException e) { }
+            case "POST /api/info":
+                out.println("HTTP/1.1 201 Created");
+                out.println("Content-Type: application/json; charset=UTF-8");
+                out.println("");
+                out.println("{ \"mensaje\": \"Datos recibidos con éxito\", \"tuBody\": " + body + " }");
+                break;
+            case "GET /lento":
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                }
                 respuesta.append("HTTP/1.1 200 OK\n");
                 respuesta.append("Content-Type: application/json; charset=UTF-8\n\n");
                 respuesta.append("{ \"mensaje\":\"Esta respuesta tardo 10 segundos\" }");
@@ -82,7 +93,8 @@ public class Enrutador {
             default:
                 respuesta.append("HTTP/1.1 404 NOT FOUND\n");
                 respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                respuesta.append("<html><body style='background-color: #7f1d1d; color: white; text-align: center; padding: 50px;'>");
+                respuesta.append(
+                        "<html><body style='background-color: #7f1d1d; color: white; text-align: center; padding: 50px;'>");
                 respuesta.append("<h1>Error 404</h1>");
                 respuesta.append("<p>La pagina " + ruta + " a la que intentas acceder no existe.</p>");
                 respuesta.append("</body></html>");

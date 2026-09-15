@@ -34,7 +34,7 @@ public class ManejadorCliente extends Thread {
             int lengthBody = 0;
             String ruta = primeraLinea[1];
             String metodo = primeraLinea[0];
-
+            String body = "";
             while ((cabecera = in.readLine()) != null && !cabecera.isEmpty()) {
                 if(cabecera.startsWith("Content-Length:")){
                     lengthBody = Integer.parseInt(cabecera.substring(15).trim());
@@ -44,13 +44,13 @@ public class ManejadorCliente extends Thread {
             if(metodo.equals("POST") && lengthBody>0){
                 char[] cuerpoDeLaPeticion = new char[lengthBody];
                 in.read(cuerpoDeLaPeticion, 0, lengthBody);
-                String body = new String(cuerpoDeLaPeticion);
+                body = new String(cuerpoDeLaPeticion);
                 System.out.println("EL metodo es: "+ metodo);
                 System.out.println("el cuerpo de la peticion es: "+ body);
             }
             
             // Preparamos el canal de salida para responder
-            out.print(Enrutador.generarRespuesta(ruta));
+            out.print(Enrutador.generarRespuesta(ruta, metodo, body, out));
             out.flush(); // Asegura que se envíe todo
 
             System.out.println("--> Respuesta HTML enviada con éxito.");
