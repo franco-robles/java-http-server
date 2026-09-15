@@ -1,106 +1,31 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+
 import java.io.PrintWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+
+import java.util.HashMap;
 
 public class Enrutador {
+    public static HashMap<String, Controlador> rutas = new HashMap<>();
+
+    public static void get(String ruta, Controlador controlador) {
+        rutas.put("GET " + ruta, controlador);
+    }
+
+    public static void post(String ruta, Controlador controlador) {
+        rutas.put("POST " + ruta, controlador);
+    }
 
     // Método estático que recibe la ruta y devuelve la respuesta HTTP completa
-    public static String generarRespuesta(String ruta, String metodo, String body, PrintWriter out) {
-        StringBuilder respuesta = new StringBuilder();
-
+    public static void generarRespuesta(String ruta, String metodo, String body, PrintWriter out) {
         String metodoRuta = metodo + " " + ruta;
-        switch (metodoRuta) {
-            case "GET /script.js":
-                Path path3 = Path.of("public/script.js");
-                try {
-                    String contenidoCss = Files.readString(path3);
-                    respuesta.append("HTTP/1.1 200 OK\n");
-                    respuesta.append("Content-Type: text/javascript; charset=UTF-8\n\n");
-                    respuesta.append(contenidoCss);
-                } catch (Exception e) {
-                    respuesta.append("HTTP/1.1 500 Internal Server Error\n");
-                    respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                    System.out.println(e.getMessage().concat("HTTP/1.1 500 Internal Server Error"));
-                }
-                break;
-            case "GET /style.css":
-                Path path2 = Path.of("public/style.css");
-                try {
-                    String contenidoCss = Files.readString(path2);
-                    respuesta.append("HTTP/1.1 200 OK\n");
-                    respuesta.append("Content-Type: text/css; charset=UTF-8\n\n");
-                    respuesta.append(contenidoCss);
-                } catch (Exception e) {
-                    respuesta.append("HTTP/1.1 500 Internal Server Error\n");
-                    respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                    System.out.println(e.getMessage().concat("HTTP/1.1 500 Internal Server Error"));
-                }
-                break;
-            case "GET /":
-                Path path = Path.of("public/index.html");
-                try {
-                    String contenidoHtml = Files.readString(path);
-                    respuesta.append("HTTP/1.1 200 OK\n");
-                    respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                    respuesta.append(contenidoHtml);
+        Controlador controlador = rutas.get(metodoRuta);
 
-                } catch (Exception e) {
-                    respuesta.append("HTTP/1.1 500 Internal Server Error\n");
-                    respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                    System.out.println(e.getMessage().concat("HTTP/1.1 500 Internal Server Error"));
-                }
-                break;
-
-            case "GET /contacto":
-                respuesta.append("HTTP/1.1 200 OK\n");
-                respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                respuesta.append(
-                        "<html><body style='background: #1e3a8a; color: white; text-align: center; padding: 50px;'>");
-                respuesta.append("<h1>LISTA DE CONTACTOS</h1>");
-                respuesta.append("<p>Email: Moder@UFO.com</p>");
-                respuesta.append("</body></html>");
-                break;
-
-            case "GET /api/info":
-                respuesta.append("HTTP/1.1 200 OK\n");
-                respuesta.append("Content-Type: application/json; charset=UTF-8\n\n");
-                respuesta.append("{ \"nombre\":\"Franco\", \"role\":\"Backend\", \"Status\":\"Online\" }");
-                break;
-
-            case "POST /api/info":
-                out.println("HTTP/1.1 201 Created");
-                out.println("Content-Type: application/json; charset=UTF-8");
-                out.println("");
-                out.println("{ \"mensaje\": \"Datos recibidos con éxito\", \"tuBody\": " + body + " }");
-                break;
-            case "GET /lento":
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                }
-                respuesta.append("HTTP/1.1 200 OK\n");
-                respuesta.append("Content-Type: application/json; charset=UTF-8\n\n");
-                respuesta.append("{ \"mensaje\":\"Esta respuesta tardo 10 segundos\" }");
-                break;
-
-            default:
-                respuesta.append("HTTP/1.1 404 NOT FOUND\n");
-                respuesta.append("Content-Type: text/html; charset=UTF-8\n\n");
-                respuesta.append(
-                        "<html><body style='background-color: #7f1d1d; color: white; text-align: center; padding: 50px;'>");
-                respuesta.append("<h1>Error 404</h1>");
-                respuesta.append("<p>La pagina " + ruta + " a la que intentas acceder no existe.</p>");
-                respuesta.append("</body></html>");
-                break;
+        if (controlador != null) {
+            controlador.manejar(body, out);
+        } else {
+            out.println("HTTP/1.1 404 Not Found");
+            out.println("Content-Type: text/html; charset=UTF-8\n");
+            out.println("<h1>Error 404: Ruta no encontrada</h1>");
         }
 
-        return respuesta.toString();
     }
 }
