@@ -39,52 +39,10 @@ public class Main {
                 System.out.println("Servidor cerrado.");
             }));
 
-            Enrutador.get("/api/user", (body, out) -> {
-                out.println("HTTP/1.1 200 OK\n\n{ \"nombre\": \"Franco\" }");
-            });
-            // Registrar las Rutas
-            // 1. Registramos la ruta para servir el HTML
-            Enrutador.get("/", (body, out) -> {
-                try {
-                    String html = java.nio.file.Files.readString(java.nio.file.Path.of("public/index.html"));
-                    out.println("HTTP/1.1 200 OK");
-                    out.println("Content-Type: text/html; charset=UTF-8\n");
-                    out.println(html);
-                } catch (Exception e) {
-                    out.println("HTTP/1.1 500 Internal Server Error\n\nError interno");
-                }
-            });
+            //registro las rutas de la Api y web
+            ApiControlador.registrarRutas();
+            WebControlador.registrarRutas();
 
-            // 2. Registramos la ruta para servir el CSS
-            Enrutador.get("/style.css", (body, out) -> {
-                try {
-                    String css = java.nio.file.Files.readString(java.nio.file.Path.of("public/style.css"));
-                    out.println("HTTP/1.1 200 OK");
-                    out.println("Content-Type: text/css; charset=UTF-8\n");
-                    out.println(css);
-                } catch (Exception e) {
-                    out.println("HTTP/1.1 500 Internal Server Error\n\nError interno");
-                }
-            });
-
-            // 3. Registramos la ruta para servir el js
-            Enrutador.get("/script.js", (body, out) -> {
-                try {
-                    String js = java.nio.file.Files.readString(java.nio.file.Path.of("public/script.js"));
-                    out.println("HTTP/1.1 200 OK");
-                    out.println("Content-Type: text/javascript; charset=UTF-8\n");
-                    out.println(js);
-                } catch (Exception e) {
-                    out.println("HTTP/1.1 500 Internal Server Error\n\nError interno");
-                }
-            });
-            // 4. Registramos la ruta POST que probamos con CURL
-            Enrutador.post("/api/info", (body, out) -> {
-                out.println("HTTP/1.1 201 Created");
-                out.println("Content-Type: application/json; charset=UTF-8\n");
-                out.println("{ \"mensaje\": \"Datos recibidos con éxito\", \"tuBody\": " + body + " }");
-            });
-            
             while (true) {
                 // El programa se pausa acá hasta que un navegador se conecta
                 Socket cliente = servidor.accept();
