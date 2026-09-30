@@ -30,8 +30,8 @@ Este proyecto nace con el objetivo de comprender a bajo nivel el funcionamiento 
 ## ⚙️ Cómo Ejecutarlo
 
 1. Clonar el repositorio:
-```bash
-   git clone https://github.com/franco-robles/java-http-server.git
+   ```bash
+    git clone https://github.com/franco-robles/java-http-server.git
 2. Compilar el proyecto incluyendo la carpeta de dependencias:
    ```bash
    javac -cp "lib/*:src" src/*.java
@@ -41,4 +41,5 @@ Este proyecto nace con el objetivo de comprender a bajo nivel el funcionamiento 
 4. Probar en el navegador accediendo a http://localhost:8080 o probar la API vía curl:
    ```bash
    curl -X POST http://localhost:8080/api/info -d '{"prueba":"exitosa"}'
+
 
