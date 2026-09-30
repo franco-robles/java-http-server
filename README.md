@@ -20,26 +20,38 @@ Este proyecto nace con el objetivo de comprender a bajo nivel el funcionamiento 
 *   **Librerías Externas:** Jackson (Core, Annotations, Databind) para serialización JSON.
 *   **Conceptos Clave:** Sockets, I/O Streams, Threading, Functional Interfaces, Colecciones (Maps).
 
-## 📂 Estructura del Proyecto
-
-*   `/src`: Código fuente (Main, Enrutador, ManejadorCliente, Controladores).
-*   `/public`: Archivos estáticos servidos por la aplicación (index.html, style.css).
-*   `/lib`: Dependencias `.jar` (Jackson).
-*   `server.properties`: Archivo de configuración del puerto.
-
 ## ⚙️ Cómo Ejecutarlo
 
 1. Clonar el repositorio:
-   ```bash
-    git clone https://github.com/franco-robles/java-http-server.git
+  ```bash
+  git clone https://github.com/franco-robles/java-http-server.git
+  ```
 2. Compilar el proyecto incluyendo la carpeta de dependencias:
-   ```bash
-   javac -cp "lib/*:src" src/*.java
+  * En Linux / Mac / GitHub Codespaces:
+  ```bash
+  javac -cp "lib/*:src" src/*.java
+  ```  
+  * En Windows (usar punto y coma):
+  ```bash
+  javac -cp "lib/*;src" src/*.java
+  ```
 3. Ejecutar el servidor:
-   ```bash
-   java -cp "lib/*:src" Main
-4. Probar en el navegador accediendo a http://localhost:8080 o probar la API vía curl:
-   ```bash
-   curl -X POST http://localhost:8080/api/info -d '{"prueba":"exitosa"}'
+  * En Linux / Mac / GitHub Codespaces:
+  ```bash
+  java -cp "lib/*:src" Main
+  ```
+  * Windows
+  ```bash
+  java -cp "lib/*;src" Main
+  ```
+4. Probar en el navegador accediendo a `http://localhost:8080` o probar la API vía curl:
 
+  * En Linux / Mac / GitHub Codespaces:
+  ```bash
+  curl -X POST http://localhost:8080/api/info -d '{"prueba":"exitosa"}'
+  ```
+  * En Windows (CMD):
+  ```bash
+  curl -X POST http://localhost:8080/api/info -d "{\"prueba\":\"exitosa\"}"
+  ```
 
